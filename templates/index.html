@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function clearForm() {
+            document.getElementsByName('email_text')[0].value = '';
+            document.getElementById('prediction').innerHTML = '';
+            document.getElementById('prediction-text').innerHTML = '';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Email Spam Detector</h1>
+
+        <form method="post">
+            <textarea name="email_text" placeholder="Paste your email here...">{{ email_text }}</textarea><br>
+            <button type="submit">Check</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+        </form>
+
+        {% if prediction is not none %}
+            <h2 id="prediction">Prediction: {{ prediction }}</h2>
+            <p id="prediction-text" class="{% if prediction > 0.5 %}spam{% else %}safe{% endif %}">
+                {% if prediction > 0.5 %}
+                    ⚠️ Likely Spam
+                {% else %}
+                    ✅ Likely Safe
+                {% endif %}
+            </p>
+        {% else %}
+            <h2 id="prediction"></h2>
+            <p id="prediction-text"></p>
+        {% endif %}
+    </div>
+</body>
+</html>
